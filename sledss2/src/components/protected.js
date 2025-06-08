@@ -1,16 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
+import { Navigate } from "react-router-dom";
 
 const ProtectedRoute = ({ children }) => {
-  const userID = localStorage.getItem("userID");
+  const userID = localStorage.getItem("userID"); // Check if user is logged in
 
-  useEffect(() => {
-    if (!userID) {
-      // Redirect using a full page reload
-      window.location.replace("http://elderchatgpt.com:5018/");
-    }
-  }, [userID]);
-
-  return userID ? children : null;
+  return userID ? children : <Navigate to="/about" replace />; // Redirect if not logged in
 };
 
 export default ProtectedRoute;
