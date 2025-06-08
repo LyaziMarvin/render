@@ -156,10 +156,14 @@ app.post('/social', async (req, res) => {
 
 
 // Route to retrieve the user's social score
+// Route to retrieve the user's social score
 app.get('/social-score/:userId', async (req, res) => {
   const { userId } = req.params;
+  console.log('[API CALL] /social-score/:userId');
+  console.log('Received userId:', userId);
 
   if (!userId) {
+    console.warn('No userId provided in URL');
     return res.status(400).json({ error: 'User ID is required' });
   }
 
@@ -172,17 +176,23 @@ app.get('/social-score/:userId', async (req, res) => {
       { userId }
     );
 
+    console.log('Query result:', result.records);
+
     if (result.records.length === 0) {
+      console.warn('No score found for userId:', userId);
       return res.status(404).json({ error: 'Social score not found' });
     }
 
     const score = result.records[0].get('score');
+    console.log('Retrieved score:', score);
+
     res.json({ userId, score });
   } catch (error) {
     console.error('Error retrieving social score:', error);
     res.status(500).json({ error: 'Failed to retrieve social score' });
   }
 });
+
 
 // Save BMI value to Neo4j
 
